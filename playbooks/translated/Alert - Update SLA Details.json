@@ -1,0 +1,89 @@
+{
+  "id": "playbook--fefb9f12-d308-461c-8aa7-a5d6279ab469",
+  "type": "playbook",
+  "spec_version": "cacao-2.0",
+  "name": "Alert - Update SLA Details",
+  "description": "Updates an alert's acknowledgement due date and response due date based on the severity of the alert.",
+  "playbook_types": ["notification"],
+  "playbook_activities": null,
+  "labels": ["system", "SLA", "Subroutine"],
+  "created": null,
+  "modified": null,
+  "workflow_start": "start--48a5f973-44ed-4ff0-9366-c05a5a195f2d",
+  "workflow": {
+    "if-condition--e4aae5b8-e913-4e14-88c0-0313d29aa456": {
+      "name": "Verify SLA Details",
+      "description": "This step verifies if the SLA details are set by checking the length of the 'sla_time_list'. If the SLA details are set, it routes to the 'Calculate Ack SLA' step; otherwise, it routes to the 'No SLA Details Fetched' step.",
+      "type": "if-condition",
+      "condition": "{{ vars.sla_time_list | length > 0 }}",
+      "on_true": "action--5211aba1-b09c-422a-a665-64163ab842e4",
+      "on_false": "action--449d34d1-5fa7-416a-bca0-cb25c7df20c7"
+    },
+    "start--48a5f973-44ed-4ff0-9366-c05a5a195f2d": {
+      "name": "Start",
+      "description": "The 'Start' step initializes the workflow by setting up the input parameters such as alert_id, severity, tenant_id, incident_id, tenant_name, and alert_crt_dt.",
+      "on_completion": "action--c84cae33-e491-4342-b885-b618b25d6b69",
+      "type": "start"
+    },
+    "action--c84cae33-e491-4342-b885-b618b25d6b69": {
+      "name": "GET SLA",
+      "description": "Retrieves the SLA details based on the provided tenant IRI and incident severity.",
+      "on_completion": "if-condition--e4aae5b8-e913-4e14-88c0-0313d29aa456",
+      "type": "action"
+    },
+    "action--f186e243-1e6e-45ba-b7b9-6e77c0223033": {
+      "name": "Update SLA",
+      "description": "This step updates the alert's acknowledgement due date and response due date based on the calculated SLA values. It also sets the SLA statuses for both acknowledgement and response.",
+      "on_completion": "end--b73f79de-1d37-45c0-a7dc-b060cfcfd505",
+      "type": "action"
+    },
+    "action--5211aba1-b09c-422a-a665-64163ab842e4": {
+      "name": "Calculate Ack SLA",
+      "description": "Calculates the acknowledgement SLA if the alert acknowledgement time is greater than 0.",
+      "on_completion": "action--28df1631-dd54-4272-8efc-6d0852aa6594",
+      "type": "action"
+    },
+    "action--28df1631-dd54-4272-8efc-6d0852aa6594": {
+      "name": "Calculate Resp SLA",
+      "description": "Calculates the response SLA if the alert response time is greater than 0.",
+      "on_completion": "action--f186e243-1e6e-45ba-b7b9-6e77c0223033",
+      "type": "action"
+    },
+    "action--449d34d1-5fa7-416a-bca0-cb25c7df20c7": {
+      "name": "No SLA Details Fetched",
+      "description": "This step is executed when no SLA details are fetched, performing no operation.",
+      "on_completion": "end--ca251c6e-0985-4a2f-b712-58e58fb7b771",
+      "type": "action"
+    },
+    "end--b73f79de-1d37-45c0-a7dc-b060cfcfd505": {
+      "type": "end"
+    },
+    "end--ca251c6e-0985-4a2f-b712-58e58fb7b771": {
+      "type": "end"
+    }
+  },
+  "playbook_variables": {
+    "__severity__": {
+      "description": null,
+      "type": "string",
+      "value": null,
+      "external": true
+    },
+    "__alert_id__": {
+      "description": null,
+      "type": "uuid",
+      "value": null,
+      "external": true
+    },
+    "__alert_crt_dt__": {
+      "description": null,
+      "type": "string",
+      "value": null
+    },
+    "__tenant_iri__": {
+      "description": null,
+      "type": "uri",
+      "value": null
+    }
+  }
+}

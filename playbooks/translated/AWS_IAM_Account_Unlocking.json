@@ -1,0 +1,66 @@
+{
+  "id": "playbook--55f8aed8-d1c1-4bef-b16f-fc075d97a025",
+  "type": "playbook",
+  "spec_version": "cacao-2.0",
+  "name": "Account Unlocking",
+  "description": "Accepts user name that needs to be enabled in AWS IAM. Enabling an account involves reattaching their login profile which will require setting a new password. Generates an observable output based on the status of account unlocking or enabling.",
+  "playbook_types": ["remediation"],
+  "playbook_activities": ["restore-capabilities", "revert-system"],
+  "labels": ["user", "aws_iam", "enable_account", "D3-RUAA"],
+  "created": "2023-08-14T15:09:52.076731Z",
+  "modified": "2023-08-14T15:09:52.076731Z",
+  "workflow_start": "start--bd51f5a4-abc4-4b60-90c5-dcb9148cfca5",
+  "workflow": {
+    "start--bd51f5a4-abc4-4b60-90c5-dcb9148cfca5": {
+      "name": "on_start",
+      "on_completion": "if-condition--d19bac43-2ffb-4c29-b0e0-754df6f2428b",
+      "type": "start"
+    },
+    "if-condition--d19bac43-2ffb-4c29-b0e0-754df6f2428b": {
+      "name": "username filter",
+      "description": "Filter user name inputs to route inputs to appropriate actions.",
+      "type": "if-condition",
+      "condition": "[playbook_input:user != '']",
+      "on_true": "action--690dd834-31cf-4da5-82c5-7c2f9fdd9aa1",
+      "on_false": "end--36a85949-e0b8-48e5-9501-5c78f1983059"
+    },
+    "action--690dd834-31cf-4da5-82c5-7c2f9fdd9aa1": {
+      "name": "enable user account",
+      "description": "Enable user account from filtered playbook inputs.",
+      "on_completion": "if-condition--f05f4d8f-3a0d-4006-8b3a-a6ec585893ad",
+      "type": "action"
+    },
+    "if-condition--f05f4d8f-3a0d-4006-8b3a-a6ec585893ad": {
+      "name": "filter enable result",
+      "description": "filter check if the user is enabled successfully.",
+      "type": "if-condition",
+      "condition": "enable_user_account:action_result.status == 'success'",
+      "on_true": "action--0d1efb03-238c-4f5b-bd6f-380038b29ab1",
+      "on_false": "end--2097dc87-ddab-46e4-9bf4-611732781735"
+    },
+    "action--0d1efb03-238c-4f5b-bd6f-380038b29ab1": {
+      "name": "username observables",
+      "description": "Format a normalized output for each user.",
+      "on_completion": "end--b1afa0f2-e4d3-43dd-b4d5-841e82a35e27",
+      "type": "action"
+    },
+    "end--b1afa0f2-e4d3-43dd-b4d5-841e82a35e27": {
+      "name": "on_finish",
+      "type": "end"
+    },
+    "end--36a85949-e0b8-48e5-9501-5c78f1983059": {
+      "type": "end"
+    },
+    "end--2097dc87-ddab-46e4-9bf4-611732781735": {
+      "type": "end"
+    }
+  },
+  "playbook_variables": {
+    "__name__": {
+      "type": "string",
+      "description": "A user name provided for account restoration - AWS IAM",
+      "value": "",
+      "external": true
+    }
+  }
+}

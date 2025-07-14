@@ -1,0 +1,58 @@
+{
+    "id": "playbook--04bb0030-71ec-4da0-a268-659fca628bcc",
+    "type": "playbook",
+    "spec_version": "cacao-2.0",
+    "name": "ThreatQ - Email Reputation",
+    "description": "Retrieves the reputation of indicators of type 'Email' using ThreatQ.",
+    "playbook_types": [
+        "detection",
+        "investigation"
+    ],
+    "playbook_activities": [
+        "analyze-collected-data",
+        "identify-indicators"
+    ],
+    "labels": [
+        "Subroutine"
+    ],
+    "created": null,
+    "modified": null,
+    "workflow_start": "start--c15cc682-d10f-466c-b6c7-ae94f281e141",
+    "workflow": {
+        "start--c15cc682-d10f-466c-b6c7-ae94f281e141": {
+            "name": "Start",
+            "type": "start",
+            "on_completion": "action--9130b5d8-8040-4924-a500-b60ddb14c539"
+        },
+        "action--9130b5d8-8040-4924-a500-b60ddb14c539": {
+            "name": "Configurations",
+            "type": "action",
+            "on_completion": "action--db5205ca-5936-496c-8dc9-83ce75355a37"
+        },
+        "action--db5205ca-5936-496c-8dc9-83ce75355a37": {
+            "name": "Get Email Reputation from Threatq",
+            "type": "action",
+            "on_completion": "action--888d879f-1498-4071-86ca-e2a29ba27717"
+        },
+        "action--888d879f-1498-4071-86ca-e2a29ba27717": {
+            "name": "Compute Threat Summary",
+            "type": "action",
+            "on_completion": "action--6e2557fe-4e24-4b0b-86dc-112cd4aa0870"
+        },
+        "action--6e2557fe-4e24-4b0b-86dc-112cd4aa0870": {
+            "name": "enrichment_summary",
+            "type": "action",
+            "on_completion": "end--55c1acb5-b20c-4683-b507-ba370db01bbf"
+
+        },
+        "end--55c1acb5-b20c-4683-b507-ba370db01bbf": {
+            "type": "end"
+        }
+    },
+    "playbook_variables": {
+        "__indicator_value__": {
+            "type": "string",
+            "external": true
+        }
+    }
+}

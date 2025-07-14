@@ -1,0 +1,66 @@
+{
+  "id": "playbook--82a4872f-6cd6-41c3-9300-ee19b75f35d4",
+  "type": "playbook",
+  "spec_version": "cacao-2.0",
+  "name": "DNS Denylisting",
+  "description": "Accepts a domain or list of domains as input. Blocks the given domains in Cisco Umbrella.\n\nhttps://d3fend.mitre.org/technique/d3f:DNSDenylisting/",
+  "playbook_types": ["mitigation", "prevention"],
+  "playbook_activities": ["restrict-access"],
+  "labels": ["Cisco Umbrella", "denylist", "D3-DNSDL", "domain"],
+  "created": "2023-08-02T11:29:36.835550Z",
+  "modified": "2023-08-02T11:29:36.835550Z",
+  "workflow_start": "start--0af13ac9-33f3-4aa9-8a8d-30011196fa46",
+  "workflow": {
+    "start--0af13ac9-33f3-4aa9-8a8d-30011196fa46": {
+      "name": "on_start",
+      "on_completion": "if-condition--c81c4133-a33a-48f8-afdf-fac18281c932",
+      "type": "start"
+    },
+    "if-condition--c81c4133-a33a-48f8-afdf-fac18281c932": {
+      "name": "domain input filter",
+      "description": "Determine branches based on provided inputs.",
+      "type": "if-condition",
+      "condition": "playbook_input:domain != 'None'",
+      "on_true": "action--0176ad76-23cc-4b77-a295-4dbaf498e6cf",
+      "on_false": "end--81ee3a74-f8b4-43e1-92ce-66156e5850da"
+    },
+    "action--0176ad76-23cc-4b77-a295-4dbaf498e6cf": {
+      "name": "block domain",
+      "description": "Block domains in Cisco Umbrella based on given domains.",
+      "on_completion": "if-condition--d7c8369b-415b-411e-ae5f-331ce8ea87e3",
+      "type": "action"
+    },
+    "if-condition--d7c8369b-415b-411e-ae5f-331ce8ea87e3": {
+      "name": "success filter",
+      "description": "Determine if the block domain was successful.",
+      "type": "if-condition",
+      "condition": "block_domain:action_result.status == 'success'",
+      "on_true": "action--97b6b51c-ba1c-4b36-b549-b201b9abd608",
+      "on_false": "end--1600f0eb-c471-42f4-a1e2-c114d2f35dec"
+    },
+    "action--97b6b51c-ba1c-4b36-b549-b201b9abd608": {
+      "name": "build observable",
+      "description": "This block uses custom code to generate an observable dictionary to output into the observables data path.",
+      "on_completion": "end--d6c0e68c-4dfc-4c6e-b637-7a8276dfe404",
+      "type": "action"
+    },
+    "end--d6c0e68c-4dfc-4c6e-b637-7a8276dfe404": {
+      "name": "on_finish",
+      "type": "end"
+    },
+    "end--81ee3a74-f8b4-43e1-92ce-66156e5850da": {
+      "type": "end"
+    },
+    "end--1600f0eb-c471-42f4-a1e2-c114d2f35dec": {
+      "type": "end"
+    }
+  },
+  "playbook_variables": {
+    "__domain__": {
+      "description": "Accepts domain and block them",
+      "type": "string",
+      "value": null,
+      "external": true
+    }
+  }
+}

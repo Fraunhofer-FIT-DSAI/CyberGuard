@@ -1,0 +1,107 @@
+{
+    "blockly": false,
+    "blockly_xml": "<xml></xml>",
+    "category": "Account Locking",
+    "coa": {
+        "data": {
+            "description": "Accepts user name that needs to be disabled in AWS IAM Active Directory. Disabling an account involves deleting their login profile which will clear the user's password. ",
+            "edges": [
+                {
+                    "id": "port_0_to_port_2",
+                    "sourceNode": "0",
+                    "sourcePort": "0_out",
+                    "targetNode": "2",
+                    "targetPort": "2_in"
+                },
+                {
+                    "id": "port_2_to_port_1",
+                    "sourceNode": "2",
+                    "sourcePort": "2_out",
+                    "targetNode": "1",
+                    "targetPort": "1_in"
+                }
+            ],
+            "nodes": {
+                "0": {
+                    "data": {
+                        "functionName": "on_start",
+                        "id": "0",
+                        "type": "start"
+                    },
+                    "id": "0",
+                    "type": "start"
+                },
+                "1": {
+                    "data": {
+                        "functionName": "on_finish",
+                        "id": "1",
+                        "type": "end"
+                    },
+                    "id": "1",
+                    "type": "end"
+                },
+                "2": {
+                    "data": {
+                        "action": "disable user",
+                        "actionType": "contain",
+                        "advanced": {
+                            "customName": "disable user account",
+                            "customNameId": 0,
+                            "description": "Disable user account from filtered playbook inputs.",
+                            "note": "Disable user account from filtered playbook inputs."
+                        },
+                        "connector": "AWS IAM",
+                        "connectorConfigs": [
+                            "aws_iam"
+                        ],
+                        "functionName": "disable_user_account",
+                        "id": "2",
+                        "parameters": {
+                            "disable_access_keys": true,
+                            "username": "playbook_input:user"
+                        },
+                        "requiredParameters": [
+                            {
+                                "data_type": "string",
+                                "field": "username"
+                            },
+                            {
+                                "data_type": "boolean",
+                                "default": true,
+                                "field": "disable_access_keys"
+                            }
+                        ],
+                        "type": "action"
+                    },
+                    "id": "2",
+                    "type": "action"
+                }
+            },
+            "notes": "Inputs: users\nInteractions: AWS IAM\nActions: Account Locking/Disabling"
+        },
+        "input_spec": [
+            {
+                "contains": [
+                    "user name",
+                    "aws iam user name"
+                ],
+                "description": "A user name provided for account locking - AWS IAM",
+                "name": "user"
+            }
+        ],
+        "playbook_type": "data",
+        "python_version": "3",
+        "schema": "5.0.9"
+    },
+    "create_time": "2023-05-25T07:50:39.360247+00:00",
+    "draft_mode": false,
+    "labels": [
+        "*"
+    ],
+    "tags": [
+        "user",
+        "aws_iam",
+        "disable_account",
+        "D3-AL"
+    ]
+}

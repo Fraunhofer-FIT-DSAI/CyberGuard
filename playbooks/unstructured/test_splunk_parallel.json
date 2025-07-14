@@ -1,0 +1,243 @@
+{
+  "blockly": false,
+  "blockly_xml": "<xml></xml>",
+  "category": "Dynamic Analysis",
+  "coa": {
+    "data": {
+      "description": "Accepts a URL or vault_id and does detonation analysis on the objects. Generates a global report and a per observable sub-report and normalized score. The score can be customized based on a variety of factors.\n\n",
+      "edges": [
+        {
+          "id": "port_24_to_port_8",
+          "sourceNode": "24",
+          "sourcePort": "24_out",
+          "targetNode": "8",
+          "targetPort": "8_in"
+        },
+        {
+          "id": "port_24_to_port_26",
+          "sourceNode": "24",
+          "sourcePort": "24_out",
+          "targetNode": "26",
+          "targetPort": "26_in"
+        },
+        {
+          "id": "port_8_to_port_10",
+          "sourceNode": "8",
+          "sourcePort": "8_out",
+          "targetNode": "10",
+          "targetPort": "10_in"
+        },
+        {
+          "id": "port_26_to_port_10",
+          "sourceNode": "26",
+          "sourcePort": "26_out",
+          "targetNode": "10",
+          "targetPort": "10_in"
+        }
+      ],
+      "globalCustomCode": null,
+      "hash": "74a51ccf79fc9363135cdd3b63ffe935edbeec5a",
+      "nodes": {
+        "8": {
+          "data": {
+            "advanced": {
+              "customName": "normalized url summary output",
+              "customNameId": 0,
+              "description": "This block uses custom code for normalizing score. Adjust the logic as desired in the documented sections.",
+              "join": [],
+              "note": "This block uses custom code for normalizing score. Adjust the logic as desired in the documented sections."
+            },
+            "functionId": 2,
+            "functionName": "normalized_url_summary_output",
+            "id": "8",
+            "inputParameters": [
+              "filtered-data:url_status_filter:condition_1:url_detonation:action_result.parameter.url",
+              "filtered-data:url_status_filter:condition_1:url_detonation:action_result.data.*.JobID",
+              "filtered-data:url_summary_filter:condition_1:get_url_summary_output:action_result.parameter.job_id",
+              "filtered-data:url_summary_filter:condition_1:get_url_summary_output:action_result.summary.Score",
+              "filtered-data:url_summary_filter:condition_1:get_url_summary_output:action_result.data.*.Resources",
+              "filtered-data:url_summary_filter:condition_1:get_url_summary_output:action_result.data.*.Verdict"
+            ],
+            "outputVariables": [
+              "url_score_object",
+              "scores",
+              "classifications",
+              "score_id",
+              "url",
+              "job_id"
+            ],
+            "type": "code"
+          },
+          "errors": {},
+          "id": "8",
+          "type": "code",
+          "userCode": "\n    score_table = {\n        \"0\":\"Unknown\",\n        \"1\":\"Very_Safe\",\n        \"2\":\"Safe\",\n        \"3\":\"Probably_Safe\",\n        \"4\":\"Leans_Safe\",\n        \"5\":\"May_not_be_Safe\",\n        \"6\":\"Exercise_Caution\",\n        \"7\":\"Suspicious_or_Risky\",\n        \"8\":\"Possibly_Malicious\",\n        \"9\":\"Probably_Malicious\",\n        \"10\":\"Malicious\"\n    }\n    classification_ids = {\n        \"Unknown\": 0,\n        \"Adware\": 1,\n        \"Backdoor\": 2,\n        \"Bot\": 3,\n        \"Bootkit\": 4,\n        \"DDOS\": 5,\n        \"Downloader\": 6,\n        \"Dropper\": 7,\n        \"Exploit-Kit\": 8,\n        \"Keylogger\": 9,\n        \"Ransomware\": 10,\n        \"Remote-Access-Trojan\": 11,\n        \"Resource-Exploitation\": 13,\n        \"Rogue-Security-Software\": 14,\n        \"Rootkit\": 15,\n        \"Screen-Capture\": 16,\n        \"Spyware\": 17,\n        \"Trojan\": 18,\n        \"Virus\": 19,\n        \"Webshell\": 20,\n        \"Wiper\": 21,\n        \"Worm\": 22,\n        \"Other\": 99\n    }\n    normalized_url_summary_output__url_score_object = []\n    normalized_url_summary_output__scores = []\n    normalized_url_summary_output__classifications = []\n    normalized_url_summary_output__score_id = []\n    normalized_url_summary_output__url = []\n    normalized_url_summary_output__job_id = []\n    \n    ## pair forensic job results with url detonated\n    job_url_dict = {}\n    for orig_url, orig_job, filtered_job in zip(filtered_result_0_parameter_url, filtered_result_0_data___jobid, filtered_result_1_parameter_job_id):\n        if orig_job == filtered_job:\n            job_url_dict[filtered_job] = orig_url\n                \n            \n    for job, score_num, resources, verdict in zip(filtered_result_1_parameter_job_id, filtered_result_1_summary_score, filtered_result_1_data___resources, filtered_result_1_data___verdict):\n        \n        ## translate scores\n        score_id = int(score_num/10) if score_num > 0 else 0\n        score = score_table[str(score_id)]\n        url = job_url_dict[job]\n        \n        ## build a sub dictionary of high priority related observables\n        related_observables = []\n        for sub_observ in resources:\n            if sub_observ['Name'] != url:\n                second_num = sub_observ['DisplayScore']\n                second_num_id = int(second_num/10) if second_num > 0 else 0\n                related_observables.append({\n                    'value': sub_observ['Name'],\n                    'type': sub_observ['Type'].lower(),\n                    'reputation': {\n                        'score': score_table[str(second_num_id)],\n                        'orig_score': second_num,\n                        'score_id': second_num_id\n                    },\n                    'source': 'Splunk Attack Analyzer'\n                })\n        \n        # Attach final object\n        normalized_url_summary_output__url_score_object.append({\n            'value': url, \n            'orig_score': score_num, \n            'score': score, \n            'score_id': score_id, \n            'classifications': [verdict if verdict else \"Unknown\"],\n            'classification_ids': [classification_ids.get(verdict, 99) if verdict else 0],\n            'related_observables': related_observables\n        })\n        normalized_url_summary_output__scores.append(score)\n        normalized_url_summary_output__score_id.append(score_id)\n        normalized_url_summary_output__url.append(url)\n        normalized_url_summary_output__job_id.append(job)\n        normalized_url_summary_output__classifications.append([verdict if verdict else \"Unknown\"])\n        \n\n",
+          "warnings": {},
+          "x": 0,
+          "y": 1440
+        },
+        "10": {
+          "data": {
+            "advanced": {
+              "customName": "format url report ",
+              "customNameId": 0,
+              "description": "Format a summary table with the information gathered from the playbook.",
+              "drop_none": true,
+              "join": [],
+              "note": "Format a summary table with the information gathered from the playbook."
+            },
+            "functionId": 1,
+            "functionName": "format_url_report",
+            "id": "10",
+            "parameters": [
+              "normalized_url_summary_output:custom_function:url",
+              "normalized_url_summary_output:custom_function:scores",
+              "normalized_url_summary_output:custom_function:score_id",
+              "normalized_url_summary_output:custom_function:classifications",
+              "normalized_url_summary_output:custom_function:job_id",
+              "url_screenshot_formatting:custom_function:report",
+              "get_url_summary_output:action_result.summary.AppURL"
+            ],
+            "template": "SOAR analyzed URL(s) using Splunk Attack Analyzer.  The table below shows a summary of the information gathered.\n\n| URL | Normalized Score | Score Id | Classifications | Report Link | Source |\n| --- | --- | --- | --- | --- | --- |\n%%\n| `{0}` | {1} | {2} | {3} | {6} | Splunk Attack Analyzer (SAA) |\n%%\n\nScreenshots associated with the detonated URLs are shown below (if available):\n\n{5}\n",
+            "type": "format"
+          },
+          "errors": {},
+          "id": "10",
+          "type": "format",
+          "userCode": "\n    # Write your custom code here...\n    #phantom.debug(phantom.format(container=container, template=template, parameters=parameters, name=\"format_report_url\"))\n",
+          "warnings": {},
+          "x": 0,
+          "y": 1640
+        },
+        "24": {
+          "data": {
+            "action": "get job screenshots",
+            "actionType": "investigate",
+            "advanced": {
+              "customName": "get url job screenshots",
+              "customNameId": 0,
+              "description": "Add the job screenshots to the vault",
+              "join": [],
+              "note": "Add the job screenshots to the vault"
+            },
+            "connector": "Splunk Attack Analyzer Connector for Splunk SOAR",
+            "connectorConfigs": ["splunk_attack_analyzer"],
+            "connectorId": "de681fee-c552-45bf-9212-827b1c7529f8",
+            "connectorVersion": "v1",
+            "functionId": 1,
+            "functionName": "get_url_job_screenshots",
+            "id": "24",
+            "loop": {
+              "enabled": false,
+              "exitAfterUnit": "m",
+              "exitAfterValue": 10,
+              "exitConditionEnabled": false,
+              "exitLoopAfter": 2,
+              "pauseUnit": "m",
+              "pauseValue": 2
+            },
+            "parameters": {
+              "job_id": "filtered-data:url_summary_filter:condition_1:get_url_summary_output:action_result.parameter.job_id"
+            },
+            "requiredParameters": [
+              {
+                "data_type": "string",
+                "field": "job_id"
+              }
+            ],
+            "type": "action"
+          },
+          "errors": {},
+          "id": "24",
+          "type": "action",
+          "warnings": {},
+          "x": 0,
+          "y": 1220
+        },
+        "26": {
+          "data": {
+            "advanced": {
+              "customName": "url screenshot formatting",
+              "customNameId": 0,
+              "description": "Custom formatting for the markdown report that shows screenshots grouped by detonated URL",
+              "join": [],
+              "note": "Custom formatting for the markdown report that shows screenshots grouped by detonated URL"
+            },
+            "functionId": 1,
+            "functionName": "url_screenshot_formatting",
+            "id": "26",
+            "inputParameters": [
+              "filtered-data:url_status_filter:condition_1:url_detonation:action_result.parameter.url",
+              "filtered-data:url_status_filter:condition_1:url_detonation:action_result.data.*.JobID",
+              "get_url_job_screenshots:action_result.parameter.job_id",
+              "get_url_job_screenshots:action_result.data.*.file_name",
+              "get_url_job_screenshots:action_result.data.*.id"
+            ],
+            "outputVariables": ["report"],
+            "type": "code"
+          },
+          "errors": {},
+          "id": "26",
+          "type": "code",
+          "userCode": "    url_screenshot_formatting__report = \"\"\n    \n    for url, job_id in zip(filtered_result_0_parameter_url, filtered_result_0_data___jobid):\n        url_screenshot_formatting__report += f\"#### {url}\\n\"\n        for screenshot_job, screenshot_name, screenshot_id in zip(get_url_job_screenshots_parameter_job_id, get_url_job_screenshots_result_item_1, get_url_job_screenshots_result_item_2):\n            if job_id == screenshot_job:\n                url_screenshot_formatting__report += f\"![{screenshot_name}](/view?id={screenshot_id})\\n\"\n\n",
+          "warnings": {},
+          "x": -320,
+          "y": 1440
+        }
+      },
+      "notes": "Inputs: url,  vault_id\nInteractions: Splunk Attack Analyzer\nActions: url detonation, , file detonation\nOutputs: report, observables"
+    },
+    "input_spec": [
+      {
+        "contains": ["url"],
+        "description": "A URL provided for reputation analysis - Splunk Attack Analyzer",
+        "name": "url"
+      },
+      {
+        "contains": ["vault id"],
+        "description": "A vault_id provided for reputation analysis - Splunk Attack Analyzer",
+        "name": "vault_id"
+      }
+    ],
+    "output_spec": [
+      {
+        "contains": [],
+        "datapaths": [
+          "build_url_output:custom_function:observable_array",
+          "build_file_output:custom_function:observable_array"
+        ],
+        "deduplicate": false,
+        "description": "An array of observable dictionaries with value, type, score, score_id, and categories.",
+        "metadata": {},
+        "name": "observable"
+      },
+      {
+        "contains": [],
+        "datapaths": [
+          "format_url_report:formatted_data",
+          "format_file_report:formatted_data"
+        ],
+        "deduplicate": false,
+        "description": "a report contains value, score, confidence and categories",
+        "metadata": {},
+        "name": "report"
+      }
+    ],
+    "playbook_type": "data",
+    "python_version": "3",
+    "schema": "5.0.11",
+    "version": "6.2.0.355"
+  },
+  "create_time": "2024-03-19T15:17:38.130754+00:00",
+  "draft_mode": false,
+  "labels": ["*"],
+  "tags": [
+    "url",
+    "ip",
+    "domain",
+    "sandbox",
+    "D3-DA",
+    "vault_id",
+    "splunk_attack_analyzer"
+  ]
+}

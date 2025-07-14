@@ -1,0 +1,70 @@
+{
+    "id": "playbook--679f9349-f6c5-4178-9403-e2a6a560aa11",
+    "type": "playbook",
+    "spec_version": "cacao-2.0",
+    "name": "Approval - On Create",
+    "description": "This playbook is triggered whenever an approval is requested from a playbook. This playbook is triggered whenever an approval record is created, and an email is sent out to the intended approver(s).",
+    "playbook_types": [
+        "notification"
+    ],
+    "playbook_activities": [
+        "deliver-content",
+        "identify-audience",
+        "compose-content",
+        "identify-channel"
+    ],
+    "created": null,
+    "modified": null,
+    "labels": [
+        "#system"
+    ],
+    "workflow_start": "start--a50b5ce4-dfac-4782-9190-68c22a34c23e",
+    "workflow": {
+        "action--e4fa6071-7a3d-44f5-9dc3-dd2b5f4634a3": {
+            "name": "Configuration",
+            "on_completion": "if-condition--01770550-5c9b-413e-9bab-ecbb0b397059",
+            "type": "action"
+        },
+        "start--a50b5ce4-dfac-4782-9190-68c22a34c23e": {
+            "name": "Start",
+            "on_completion": "action--e4fa6071-7a3d-44f5-9dc3-dd2b5f4634a3",
+            "type": "start"
+        },
+        "if-condition--01770550-5c9b-413e-9bab-ecbb0b397059": {
+            "name": "Check for assigned to",
+            "type": "if-condition",
+            "condition": "{{ vars.record.assignedTo != None }}",
+            "on_true": "action--935c3c24-9acd-4353-807b-c1230bfe88b6",
+            "on_false": "action--dc92f412-5e4a-48a8-8c3f-5da62f9a850a"
+        },
+        "action--dc92f412-5e4a-48a8-8c3f-5da62f9a850a": {
+            "name": "Fetch relations of the record",
+            "on_completion": "action--9da0fec1-4b1c-471b-ac95-afe5ec13af0f",
+            "type": "action"
+        },
+        "action--8ee35eca-a46d-4335-8eb1-aeb1bc27a649": {
+            "name": "Send Email Using SMTP",
+            "on_completion": "end--13f5dbf6-20f2-4b6c-8612-032f5408d18b",
+            "type": "action"
+        },
+        "action--935c3c24-9acd-4353-807b-c1230bfe88b6": {
+            "name": "Set Recepient",
+            "on_completion": "action--8ee35eca-a46d-4335-8eb1-aeb1bc27a649",
+            "type": "action"
+        },
+        "action--9da0fec1-4b1c-471b-ac95-afe5ec13af0f": {
+            "name": "Get emails of the team members",
+            "on_completion": "action--9acb3bae-7351-4d6e-961a-039c4318cf3f",
+            "type": "action"
+        },
+        "action--9acb3bae-7351-4d6e-961a-039c4318cf3f": {
+            "name": "Set All Receipients",
+            "on_completion": "action--8ee35eca-a46d-4335-8eb1-aeb1bc27a649",
+            "type": "action"
+        },
+        "end--13f5dbf6-20f2-4b6c-8612-032f5408d18b": {
+            "type": "end"
+        }
+    },
+    "playbook_variables": {}
+}

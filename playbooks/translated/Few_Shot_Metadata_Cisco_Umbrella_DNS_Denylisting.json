@@ -1,0 +1,9 @@
+{
+  "name": "DNS Denylisting",
+  "description": "Accepts a domain or list of domains as input. Blocks the given domains in Cisco Umbrella.\n\nhttps://d3fend.mitre.org/technique/d3f:DNSDenylisting/",
+  "playbook_types": ["mitigation", "prevention"],
+  "playbook_activities": ["restrict-access"],
+  "labels": ["Cisco Umbrella", "denylist", "D3-DNSDL", "domain"],
+  "created": "2023-08-02T11:29:36.835550Z",
+  "modified": "2023-08-02T11:29:36.835550Z"
+}

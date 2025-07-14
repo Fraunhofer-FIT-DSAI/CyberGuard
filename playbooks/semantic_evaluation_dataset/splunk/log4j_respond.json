@@ -1,0 +1,59 @@
+{
+  "id": "playbook--88f908e3-05b3-47b2-b3b2-b70e282c3666",
+  "type": "playbook",
+  "spec_version": "cacao-2.0",
+  "name": "Log4j Threat Response",
+  "description": "Published in response to CVE-2021-44228, this playbook is meant to be launched by log4j_investigate. In this playbook, the risk from an exploited host can be mitigated by optionally deleting malicious files from the hosts, blocking outbound network connections from the hosts, and/or shutting down the hosts.",
+  "playbook_types": ["mitigation"],
+  "playbook_activities": [
+    "eliminate-risk",
+    "restrict-access",
+    "disconnect-system"
+  ],
+  "labels": ["events", "log4j", "respond"],
+  "created": "2021-12-15T22:02:08.116265Z",
+  "modified": "2021-12-15T22:02:08.116265Z",
+  "workflow_start": "start--2057d47f-ac9f-4a7e-ac71-036769e556e7",
+  "workflow": {
+    "start--2057d47f-ac9f-4a7e-ac71-036769e556e7": {
+      "name": "on_start",
+      "on_completion": "action--760f70c1-a860-4119-aa79-5a039c2fe72f",
+      "type": "start"
+    },
+    "action--760f70c1-a860-4119-aa79-5a039c2fe72f": {
+      "name": "enumerate files to delete",
+      "on_completion": "action--7c8e89ac-5ad8-48dc-be95-9350da9ef95e",
+      "type": "action"
+    },
+    "action--7c8e89ac-5ad8-48dc-be95-9350da9ef95e": {
+      "name": "create file artifacts",
+      "on_completion": "if-condition--16b1fc71-105e-4dc6-9a85-9bd6994095a9",
+      "type": "action"
+    },
+    "if-condition--16b1fc71-105e-4dc6-9a85-9bd6994095a9": {
+      "name": "if hosts exist",
+      "type": "if-condition",
+      "condition": "artifact:*.cef.deviceHostname != '' AND (artifact:*.cef.operatingSystemFamily == 'unix' OR artifact:*.cef.operatingSystemFamily == 'windows') AND artifact:*.name == 'potential log4j file'",
+      "on_true": "playbook-action--365aa295-a47f-4dea-ab58-ad27d8ad9a2a",
+      "on_false": "playbook-action--19937ea3-0bd2-4cd5-b7e8-b73f1e9204d6"
+    },
+    "playbook-action--365aa295-a47f-4dea-ab58-ad27d8ad9a2a": {
+      "name": "playbook_internal_host_ssh_log4j_respond_2",
+      "on_completion": "end--e4561bba-acba-49ff-ba0b-58d2b846ec6d",
+      "type": "playbook-action"
+    },
+    "playbook-action--19937ea3-0bd2-4cd5-b7e8-b73f1e9204d6": {
+      "name": "playbook_internal_host_winrm_log4j_respond_2",
+      "on_completion": "end--1eedbda4-8770-415f-9471-3fb1b36bf55d",
+      "type": "playbook-action"
+    },
+    "end--e4561bba-acba-49ff-ba0b-58d2b846ec6d": {
+      "name": "on_finish",
+      "type": "end"
+    },
+    "end--1eedbda4-8770-415f-9471-3fb1b36bf55d": {
+      "type": "end"
+    }
+  },
+  "playbook_variables": {}
+}

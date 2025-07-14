@@ -1,0 +1,14 @@
+{
+  "name": "Account Locking",
+  "description": "Accepts user name that needs to be disabled in AWS IAM Active Directory. Disabling an account involves deleting their login profile which will clear the user's password. Generates an observable output based on the status of account locking or disabling.",
+  "playbook_types": ["mitigation"],
+  "playbook_activities": [
+    "eliminate-risk",
+    "restrict-access",
+    "scan-system",
+    "disconnect-system"
+  ],
+  "created": "2023-05-25T07:50:39.360247Z",
+  "modified": "2023-05-25T07:50:39.360247Z",
+  "labels": ["user", "aws_iam", "disable_account", "D3-AL"]
+}

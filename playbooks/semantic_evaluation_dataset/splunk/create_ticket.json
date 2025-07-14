@@ -1,0 +1,74 @@
+{
+  "id": "playbook--d3847bd0-5c29-4a56-a1e5-a8ce771be6f5",
+  "type": "playbook",
+  "spec_version": "cacao-2.0",
+  "name": null,
+  "description": "Create a ticket in another case management system to track this event. Use the title and description from the input, but also append a header and indicator summary table to share more information from the SOAR event.",
+  "playbook_types": ["notification"],
+  "playbook_activities": [
+    "identify-indicators",
+    "compose-content",
+    "deliver-content"
+  ],
+  "labels": ["*"],
+  "created": "2022-06-12T19:42:46.018570Z",
+  "modified": "2022-06-12T19:42:46.018570Z",
+  "workflow_start": "start--a0050bee-fa6f-4a72-9d9b-f5f9e22d5534",
+  "workflow": {
+    "start--a0050bee-fa6f-4a72-9d9b-f5f9e22d5534": {
+      "name": "on_start",
+      "type": "start",
+      "on_completion": "action--bf0d998f-8c61-40a2-a84a-1151583ae8ce"
+    },
+    "action--bf0d998f-8c61-40a2-a84a-1151583ae8ce": {
+      "name": "indicator_collect",
+      "type": "action",
+      "description": "Collect all indicators in a container and separate them by data type. Additional output data paths are created for each data type. Artifact scope is ignored.",
+      "on_completion": "action--f19195fd-b59b-4288-997d-bfc79a3b6833"
+    },
+    "action--f19195fd-b59b-4288-997d-bfc79a3b6833": {
+      "name": "format ticket description",
+      "type": "action",
+      "on_completion": "action--de757644-415c-469f-babd-85358e0a0c62"
+    },
+    "action--de757644-415c-469f-babd-85358e0a0c62": {
+      "name": "create ticket",
+      "type": "action",
+      "on_completion": "end--daba2ec6-801c-41b6-838a-c869c197ad1f"
+    },
+    "end--daba2ec6-801c-41b6-838a-c869c197ad1f": {
+      "name": "on_finish",
+      "type": "end"
+    }
+  },
+  "playbook_variables": {
+    "__ticket_title__": {
+      "description": "One line summary of the ticket",
+      "type": "string"
+    },
+    "__ticket_description__": {
+      "description": "Longer description of the ticket. A common header will be added to the beginning to link to the SOAR event, and an indicator summary table will be added to the end.",
+      "type": "string"
+    },
+    "__artifact_ids_include__": {
+      "description": "If provided, only add indicators from the selected artifacts to the indicator summary table in the ticket description.",
+      "type": "string"
+    },
+    "__indicator_types_include__": {
+      "description": "Optional parameter to only include indicators with at least one of the provided types in the output. If left empty, all indicator types will be included except those that are explicitly excluded. Accepts a comma-separated list.",
+      "type": "string"
+    },
+    "__indicator_types_exclude__": {
+      "description": "Optional parameter to exclude indicators with any of the provided types from the output. Accepts a comma-separated list.",
+      "type": "string"
+    },
+    "__indicator_tags_include__": {
+      "description": "Optional parameter to only include indicators with at least one of the provided tags in the output. If left empty, tags will be ignored except when they are excluded. Accepts a comma-separated list.",
+      "type": "string"
+    },
+    "__indicator_tags_exclude__": {
+      "description": "Optional parameter to exclude indicators with any of the provided tags from the output. Accepts a comma-separated list.",
+      "type": "string"
+    }
+  }
+}

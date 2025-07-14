@@ -1,0 +1,55 @@
+{
+  "id": "playbook--ef56a1da-3c46-4bf7-80f1-bf9025f619c5",
+  "type": "playbook",
+  "spec_version": "cacao-2.0",
+  "name": "Email Address Enrichment - Generic - Test",
+  "description": "This playbook enriches email addresses using a generic method. It clears the context, sets internal and external email addresses, and verifies the email and DBotScore.",
+  "playbook_types": ["investigation"],
+  "playbook_activities": ["identify-indicators", "analyze-collected-data"],
+  "labels": null,
+  "created": null,
+  "modified": null,
+  "workflow_start": "start--ab3c09dd-91e7-4564-9b45-6523d3f1cee9",
+  "workflow": {
+    "start--ab3c09dd-91e7-4564-9b45-6523d3f1cee9": {
+      "name": "start",
+      "on_completion": "action--590a04e2-df59-44e2-ae9a-6be62521a82a",
+      "type": "start"
+    },
+    "action--590a04e2-df59-44e2-ae9a-6be62521a82a": {
+      "name": "Clear context",
+      "on_completion": "action--e67d3434-3710-4cc3-98bb-f74ae7b3edf1",
+      "type": "action"
+    },
+    "action--e67d3434-3710-4cc3-98bb-f74ae7b3edf1": {
+      "name": "Set email address - Internal",
+      "on_completion": "action--2e537700-7b95-4fb9-8a11-49a4379037a2",
+      "type": "action"
+    },
+    "action--2e537700-7b95-4fb9-8a11-49a4379037a2": {
+      "name": "Set email address - External",
+      "on_completion": "playbook-action--029d6659-d76e-493b-8557-c708759be7f4",
+      "type": "action"
+    },
+    "playbook-action--029d6659-d76e-493b-8557-c708759be7f4": {
+      "name": "Email Address Enrichment - Generic",
+      "description": "Get email address reputation using one or more integrations",
+      "on_completion": "action--4287f41a-4ef6-4260-8808-e3a74c37336e",
+      "type": "playbook-action"
+    },
+    "action--4287f41a-4ef6-4260-8808-e3a74c37336e": {
+      "name": "Verify email",
+      "on_completion": "action--9030783c-3d13-4079-b8ef-7837e7fe6e99",
+      "type": "action"
+    },
+    "action--9030783c-3d13-4079-b8ef-7837e7fe6e99": {
+      "name": "Verify DBotScore",
+      "on_completion": "end--b56b6e54-57cf-4c56-91a2-1c98b39d049b",
+      "type": "action"
+    },
+    "end--b56b6e54-57cf-4c56-91a2-1c98b39d049b": {
+      "type": "end"
+    }
+  },
+  "playbook_variables": {}
+}

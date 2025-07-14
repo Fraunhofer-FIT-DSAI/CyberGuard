@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "main"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [
+    { include = "app" },
+]
+
+
+[tool.poetry.dependencies]
+python = "3.12.3"
+langserve = {extras = ["server"], version = ">=0.0.30"}
+pydantic = "<2"
+uvicorn = "^0.23.2"
+langchain-openai = "^0.1.8"
+langchain = "^0.2.3"
+langchain-chroma = "^0.1.0"
+portkey-ai = "^1.2.4"
+transformers = "^4.41.2"
+torch = "^2.3.1"
+langchain-community = "^0.2.4"
+tiktoken = "^0.7.0"
+jellyfish = "^1.0.4"
+pyyaml = "^6.0.1"
+fuzzywuzzy = "^0.18.0"
+jsonschema = "^4.23.0"
+tinydb = "^4.8.0"
+networkx = "^3.3"
+matplotlib = "^3.9.2"
+scipy = "^1.14.1"
+
+[tool.poetry.group.dev.dependencies]
+langchain-cli = ">=0.0.15"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

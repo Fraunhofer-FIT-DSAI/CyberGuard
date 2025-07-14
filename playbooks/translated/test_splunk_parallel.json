@@ -1,0 +1,39 @@
+{
+  "type": "playbook",
+  "spec_version": "cacao-2.0",
+  "id": "playbook--6d1cea4c-f0d1-4e3e-82e1-765da586f06b",
+  "created": "2024-07-23T21:14:20.119Z",
+  "modified": "2024-07-23T21:14:20.120Z",
+  "workflow": {
+    "action--29bceb87-ca12-4574-9ca5-bbcf7c86ef87": {
+      "name": "get url job screenshots",
+      "description": "Add the job screenshots to the vault",
+      "on_completion": "parallel--85a67bc6-2a0f-46cf-bd88-9282be117aad",
+      "type": "action"
+    },
+    "action--06573de1-1ae6-43fb-afbf-fd79cbbf335a": {
+      "name": "normalized url summary output",
+      "description": "This block uses custom code for normalizing score. Adjust the logic as desired in the documented sections.",
+      "on_completion": "action--f286ff2d-fe3e-4233-8f06-29f5a23782ad",
+      "type": "action"
+    },
+    "action--f286ff2d-fe3e-4233-8f06-29f5a23782ad": {
+      "name": "format url report",
+      "description": "Format a summary table with the information gathered from the playbook.",
+      "type": "action"
+    },
+    "action--2a7e8d6d-b3f1-4cbf-b9a8-b5b386d4c303": {
+      "name": "url screenshot formatting",
+      "description": "Custom formatting for the markdown report that shows screenshots grouped by detonated URL.",
+      "on_completion": "action--f286ff2d-fe3e-4233-8f06-29f5a23782ad",
+      "type": "action"
+    },
+    "parallel--85a67bc6-2a0f-46cf-bd88-9282be117aad": {
+      "type": "parallel",
+      "next_steps": [
+        "action--06573de1-1ae6-43fb-afbf-fd79cbbf335a",
+        "action--2a7e8d6d-b3f1-4cbf-b9a8-b5b386d4c303"
+      ]
+    }
+  }
+}

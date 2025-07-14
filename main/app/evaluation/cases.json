@@ -1,0 +1,100 @@
+{
+  "baseline": {
+    "persona": false,
+    "template": true,
+    "template_config": {
+      "answer_json": true,
+      "include_reason": false,
+      "reason_first": false
+    },
+    "reason": false,
+    "reason_config": { "in_detail": false },
+    "knowledge_injection": false,
+    "include_few_shot_prompting": false,
+    "examples_to_include": 0
+  },
+  "persona": {
+    "persona": true,
+    "template": true,
+    "template_config": {
+      "answer_json": true,
+      "include_reason": false,
+      "reason_first": false
+    },
+    "reason": false,
+    "reason_config": { "in_detail": false },
+    "knowledge_injection": false,
+    "include_few_shot_prompting": false,
+    "examples_to_include": 0
+  },
+  "reason": {
+    "persona": false,
+    "template": true,
+    "template_config": {
+      "answer_json": true,
+      "include_reason": true,
+      "reason_first": true
+    },
+    "reason": true,
+    "reason_config": { "in_detail": true },
+    "knowledge_injection": false,
+    "include_few_shot_prompting": false,
+    "examples_to_include": 0
+  },
+  "knowledge": {
+    "persona": false,
+    "template": true,
+    "template_config": {
+      "answer_json": true,
+      "include_reason": false,
+      "reason_first": false
+    },
+    "reason": false,
+    "reason_config": { "in_detail": false },
+    "knowledge_injection": true,
+    "include_few_shot_prompting": false,
+    "examples_to_include": 0
+  },
+  "one_shot": {
+    "persona": false,
+    "template": true,
+    "template_config": {
+      "answer_json": true,
+      "include_reason": false,
+      "reason_first": false
+    },
+    "reason": false,
+    "reason_config": { "in_detail": false },
+    "knowledge_injection": false,
+    "include_few_shot_prompting": true,
+    "examples_to_include": 1
+  },
+  "all_without_one_shot": {
+    "persona": true,
+    "template": true,
+    "template_config": {
+      "answer_json": true,
+      "include_reason": true,
+      "reason_first": true
+    },
+    "reason": true,
+    "reason_config": { "in_detail": true },
+    "knowledge_injection": true,
+    "include_few_shot_prompting": false,
+    "examples_to_include": 1
+  },
+  "strongest": {
+    "persona": true,
+    "template": true,
+    "template_config": {
+      "answer_json": true,
+      "include_reason": true,
+      "reason_first": true
+    },
+    "reason": true,
+    "reason_config": { "in_detail": true },
+    "knowledge_injection": true,
+    "include_few_shot_prompting": true,
+    "examples_to_include": 1
+  }
+}

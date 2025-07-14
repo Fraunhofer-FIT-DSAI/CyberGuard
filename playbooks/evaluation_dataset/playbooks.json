@@ -1,0 +1,60 @@
+{
+  "splunk": {
+    "translated": [
+      "AWS_IAM_Account_Locking.json",
+      "AWS_IAM_Account_Unlocking.json",
+      "Cisco_Umbrella_DNS_Denylisting.json",
+      "create_ticket.json",
+      "log4j_respond.json"
+    ],
+    "non_translated": [
+      "AD_LDAP_Entity_Attribute_Lookup.json",
+      "Active_Directory_Disable_Account_Dispatch.json",
+      "Active_Directory_Enable_Account_Dispatch.json",
+      "Attribute_Lookup_Dispatch.json",
+      "Automated_Enrichment.json",
+      "dispatch_input_playbooks.json",
+      "domain_investigate.json",
+      "host_quarantine_crowdstrike.json",
+      "intelligence_management_enrich_indicators.json",
+      "internal_host_splunk_investigate_log4j.json",
+      "internal_host_ssh_investigate.json",
+      "internal_host_winrm_investigate.json",
+      "log4j_investigate.json",
+      "threat_intel_investigate.json",
+      "url_investigate.json"
+    ]
+  },
+  "demisto": {
+    "translated": [
+      "playbook-Email_Address_Enrichment_Generic_Test.yml",
+      "playbook-IP_Enrichment_-_Generic_-_Test.yml"
+    ],
+    "non_translated": [
+      "playbook-Genians-Test.yml",
+      "playbook-Phishing_-_Core_-_Test.yml",
+      "playbook-PhishMe_test.yml",
+      "playbook-ServiceNow.yml",
+      "playbook-TestWordFileToIOC.yml",
+      "playbook-Vectra-Test.yml",
+      "playbook-WordTokenizeTest.yml",
+      "playbook-Zendesk_test.yml"
+    ]
+  },
+  "fortinet": {
+    "translated": [
+      "Alert - Update SLA Details.json",
+      "ThreatQ - Email Reputation.json",
+      "Approval - On Create.json"
+    ],
+    "non_translated": [
+      "Action - File MD5 - Block (Indicator).json",
+      "Action - File MD5- Unblock (Indicator).json",
+      "Action - Host - Isolate Host.json",
+      "Action - IP Address - Block (Indicator).json",
+      "Action - URL - Block (Indicator).json",
+      "Activate Inactive Users.json",
+      "Alert - Disable Specific User.json"
+    ]
+  }
+}

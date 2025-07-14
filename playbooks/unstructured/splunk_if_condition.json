@@ -1,0 +1,261 @@
+{
+    "blockly": false,
+    "blockly_xml": "<xml></xml>",
+    "category": "Dynamic Analysis",
+    "coa": {
+      "data": {
+        "description": "Accepts a URL or vault_id and does detonation analysis on the objects. Generates a global report and a per observable sub-report and normalized score. The score can be customized based on a variety of factors.\n\n",
+        "edges": [
+          {
+            "id": "port_0_to_port_2",
+            "sourceNode": "0",
+            "sourcePort": "0_out",
+            "targetNode": "2",
+            "targetPort": "2_in"
+          },
+          {
+            "conditions": [
+              {
+                "index": 0
+              }
+            ],
+            "id": "port_2_to_port_3",
+            "sourceNode": "2",
+            "sourcePort": "2_out",
+            "targetNode": "3",
+            "targetPort": "3_in"
+          },
+          {
+            "conditions": [
+              {
+                "index": 1
+              }
+            ],
+            "id": "port_2_to_port_12",
+            "sourceNode": "2",
+            "sourcePort": "2_out",
+            "targetNode": "12",
+            "targetPort": "12_in"
+          }
+        ],
+        "globalCustomCode": null,
+        "hash": "74a51ccf79fc9363135cdd3b63ffe935edbeec5a",
+        "nodes": {
+          "0": {
+            "data": {
+              "advanced": {
+                "join": []
+              },
+              "functionName": "on_start",
+              "id": "0",
+              "type": "start"
+            },
+            "errors": {},
+            "id": "0",
+            "type": "start",
+            "warnings": {},
+            "x": 190,
+            "y": -8.952838470577262e-13
+          },
+          "12": {
+            "data": {
+              "action": "detonate file",
+              "actionType": "generic",
+              "advanced": {
+                "customName": "file detonation",
+                "customNameId": 0,
+                "delayTime": 0,
+                "description": "Queries SAA for information about the provided vault_id(s)",
+                "join": [],
+                "note": "Queries SAA for information about the provided vault_id(s)"
+              },
+              "connector": "Splunk Attack Analyzer Connector for Splunk SOAR",
+              "connectorConfigs": ["splunk_attack_analyzer"],
+              "connectorId": "de681fee-c552-45bf-9212-827b1c7529f8",
+              "connectorVersion": "v1",
+              "functionId": 1,
+              "functionName": "file_detonation",
+              "id": "12",
+              "loop": {
+                "enabled": false,
+                "exitAfterUnit": "m",
+                "exitAfterValue": 10,
+                "exitConditionEnabled": false,
+                "exitLoopAfter": 2,
+                "pauseUnit": "m",
+                "pauseValue": 2
+              },
+              "parameters": {
+                "file": "filtered-data:saa_input_filter:condition_2:playbook_input:vault_id"
+              },
+              "requiredParameters": [
+                {
+                  "data_type": "string",
+                  "field": "file"
+                }
+              ],
+              "type": "action"
+            },
+            "errors": {},
+            "id": "12",
+            "type": "action",
+            "warnings": {},
+            "x": 340,
+            "y": 328
+          },
+          "2": {
+            "data": {
+              "advanced": {
+                "customName": "saa input filter",
+                "customNameId": 0,
+                "delimiter": ",",
+                "delimiter_enabled": true,
+                "description": "Determine branches based on provided inputs.",
+                "join": [],
+                "note": "Determine branches based on provided inputs."
+              },
+              "conditions": [
+                {
+                  "comparisons": [
+                    {
+                      "conditionIndex": 0,
+                      "op": "!=",
+                      "param": "playbook_input:url",
+                      "value": ""
+                    }
+                  ],
+                  "conditionIndex": 0,
+                  "customName": "saa_url_input",
+                  "logic": "and"
+                },
+                {
+                  "comparisons": [
+                    {
+                      "conditionIndex": 1,
+                      "op": "!=",
+                      "param": "playbook_input:vault_id",
+                      "value": ""
+                    }
+                  ],
+                  "conditionIndex": 1,
+                  "customName": "saa_vault_id_input",
+                  "logic": "and"
+                }
+              ],
+              "functionId": 1,
+              "functionName": "saa_input_filter",
+              "id": "2",
+              "type": "filter"
+            },
+            "errors": {},
+            "id": "2",
+            "type": "filter",
+            "warnings": {},
+            "x": 230,
+            "y": 148
+          },
+          "3": {
+            "data": {
+              "action": "detonate url",
+              "actionType": "generic",
+              "advanced": {
+                "customName": "url detonation",
+                "customNameId": 0,
+                "delayTime": 0,
+                "description": "Queries SAA for information about the provided URL(s)",
+                "join": [],
+                "note": "Queries SAA for information about the provided URL(s)"
+              },
+              "connector": "Splunk Attack Analyzer Connector for Splunk SOAR",
+              "connectorConfigs": ["splunk_attack_analyzer"],
+              "connectorId": "de681fee-c552-45bf-9212-827b1c7529f8",
+              "connectorVersion": "v1",
+              "functionId": 1,
+              "functionName": "url_detonation",
+              "id": "3",
+              "loop": {
+                "enabled": false,
+                "exitAfterUnit": "m",
+                "exitAfterValue": 10,
+                "exitConditionEnabled": false,
+                "exitLoopAfter": 2,
+                "pauseUnit": "m",
+                "pauseValue": 2
+              },
+              "parameters": {
+                "url": "filtered-data:saa_input_filter:condition_1:playbook_input:url"
+              },
+              "requiredParameters": [
+                {
+                  "data_type": "string",
+                  "field": "url"
+                }
+              ],
+              "type": "action"
+            },
+            "errors": {},
+            "id": "3",
+            "type": "action",
+            "userCode": "\n    # Write your custom code here...\n\n",
+            "warnings": {},
+            "x": 0,
+            "y": 320
+          }
+        },
+        "notes": "Inputs: url,  vault_id\nInteractions: Splunk Attack Analyzer\nActions: url detonation, , file detonation\nOutputs: report, observables"
+      },
+      "input_spec": [
+        {
+          "contains": ["url"],
+          "description": "A URL provided for reputation analysis - Splunk Attack Analyzer",
+          "name": "url"
+        },
+        {
+          "contains": ["vault id"],
+          "description": "A vault_id provided for reputation analysis - Splunk Attack Analyzer",
+          "name": "vault_id"
+        }
+      ],
+      "output_spec": [
+        {
+          "contains": [],
+          "datapaths": [
+            "build_url_output:custom_function:observable_array",
+            "build_file_output:custom_function:observable_array"
+          ],
+          "deduplicate": false,
+          "description": "An array of observable dictionaries with value, type, score, score_id, and categories.",
+          "metadata": {},
+          "name": "observable"
+        },
+        {
+          "contains": [],
+          "datapaths": [
+            "format_url_report:formatted_data",
+            "format_file_report:formatted_data"
+          ],
+          "deduplicate": false,
+          "description": "a report contains value, score, confidence and categories",
+          "metadata": {},
+          "name": "report"
+        }
+      ],
+      "playbook_type": "data",
+      "python_version": "3",
+      "schema": "5.0.11",
+      "version": "6.2.0.355"
+    },
+    "create_time": "2024-03-19T15:17:38.130754+00:00",
+    "draft_mode": false,
+    "labels": ["*"],
+    "tags": [
+      "url",
+      "ip",
+      "domain",
+      "sandbox",
+      "D3-DA",
+      "vault_id",
+      "splunk_attack_analyzer"
+    ]
+  }
+  

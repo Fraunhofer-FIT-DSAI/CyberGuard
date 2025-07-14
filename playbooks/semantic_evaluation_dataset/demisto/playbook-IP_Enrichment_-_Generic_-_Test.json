@@ -1,0 +1,76 @@
+{
+    "id": "playbook--76f2e84c-701e-487e-94e8-6925a1000d77",
+    "type": "playbook",
+    "spec_version": "cacao-2.0",
+    "name": "IP Enrichment - Generic - Test",
+    "description": null,
+    "playbook_types": [
+        "detection"
+    ],
+    "playbook_activities": [
+        "scan-system",
+        "match-indicator"
+    ],
+    "labels": null,
+    "created": null,
+    "modified": null,
+    "workflow_start": "start--d26aab8a-0233-4acf-8135-4d1c4d3c04ff",
+    "workflow": {
+        "start--d26aab8a-0233-4acf-8135-4d1c4d3c04ff": {
+            "on_completion": "action--2429215a-2b2d-454a-805a-cc24ee90c1ae",
+            "type": "start"
+        },
+        "action--2429215a-2b2d-454a-805a-cc24ee90c1ae": {
+            "name": "Clear Context",
+            "description": "Clear the context",
+            "on_completion": "action--cdb25121-683f-495c-8794-dd57e4d51b1d",
+            "type": "action"
+        },
+        "playbook-action--fc1810d4-c09d-458f-9723-172f4fd52112": {
+            "name": "IP Enrichment - Generic",
+            "description": "Enrich IP using one or more integrations",
+            "on_completion": "if-condition--160b6e8d-332e-4007-a195-7d3b38792d31",
+            "type": "playbook-action"
+        },
+        "action--6aaf2be4-7a15-4c3a-9be9-9b34bca02b4e": {
+            "name": "Verify IP Object",
+            "description": "Verify that the context contains the IP Address",
+            "on_completion": "action--dc41291a-6e77-4fde-9f99-a0ee3e4f317c",
+            "type": "action"
+        },
+        "action--dc41291a-6e77-4fde-9f99-a0ee3e4f317c": {
+            "name": "Verify DBotScore",
+            "description": "Verify that the context contains the DBotScore",
+            "on_completion": "end--477f5132-fd05-4155-a5eb-4f5e740476ca",
+            "type": "action"
+        },
+        "action--cdb25121-683f-495c-8794-dd57e4d51b1d": {
+            "name": "Set IP Address",
+            "description": "Sets a value into the context with the given context key",
+            "on_completion": "playbook-action--fc1810d4-c09d-458f-9723-172f4fd52112",
+            "type": "action"
+        },
+        "if-condition--160b6e8d-332e-4007-a195-7d3b38792d31": {
+            "name": "Check for errors",
+            "type": "if-condition",
+            "condition": "[Error]",
+            "on_true": "if-condition--7a237f7f-a487-4679-bd76-e2b2dcade621",
+            "on_false": "action--6aaf2be4-7a15-4c3a-9be9-9b34bca02b4e"
+        },
+        "end--477f5132-fd05-4155-a5eb-4f5e740476ca": {
+            "name": "End of test",
+            "type": "end"
+        },
+        "if-condition--7a237f7f-a487-4679-bd76-e2b2dcade621": {
+            "name": "Check for API RATE",
+            "type": "if-condition",
+            "condition": "${Error} == 'No content received. Possible API rate limit reached.'",
+            "on_true": "end--477f5132-fd05-4155-a5eb-4f5e740476ca",
+            "on_false": "end--11cdceda-506d-4c7a-9add-84ca8b534a71"
+        },
+        "end--11cdceda-506d-4c7a-9add-84ca8b534a71": {
+            "type": "end"
+        }
+    },
+    "playbook_variables": {}
+}
