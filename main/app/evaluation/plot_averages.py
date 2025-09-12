@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from tinydb import TinyDB, Query
 import os
 import numpy as np
+from pathlib import Path
 
 models = [
     "llama3.1",
@@ -95,7 +96,12 @@ def analyze_metric(metric_to_evaluate):
             for case in all_cases
         ]
 
-    fig, ax = plt.subplots(figsize=(10, 8))
+    # --- SIZE: 60% height for syntactic & graph_edit_distance; default for others ---
+    default_figsize = (10, 8)
+    if metric_to_evaluate in ("syntactic", "graph_edit_distance"):
+        fig, ax = plt.subplots(figsize=(default_figsize[0], default_figsize[1] * 0.60))
+    else:
+        fig, ax = plt.subplots(figsize=default_figsize)
 
     width = 0.25
     x = range(len(all_cases))
@@ -103,25 +109,35 @@ def analyze_metric(metric_to_evaluate):
         ax.bar(x, plot_data[model], width, label=model, color=original_colors[model])
         x = [p + width for p in x]
 
-    ax.set_ylabel(ylabel_to_label[metric_to_evaluate])
-    ax.set_xticks([p + width for p in range(len(all_cases))])
-    ax.set_xticklabels(
-        [case_to_label[case] for case in all_cases], rotation=45, ha="right"
-    )
+    # --- labels and styling ---
+    if metric_to_evaluate in ("metadata", "workflow", "variables"):
+        ax.set_ylabel(ylabel_to_label[metric_to_evaluate], fontsize=18)
+        ax.tick_params(axis="y", labelsize=18)
+        ax.set_xticks([p + width for p in range(len(all_cases))])
+        ax.set_xticklabels([case_to_label[case] for case in all_cases],
+                           rotation=45, ha="right", fontsize=18)
+        # Force y-limit
+        ax.set_ylim(0, 0.85)
+    else:
+        # Default styling for syntactic and graph edit distance
+        ax.set_ylabel(ylabel_to_label[metric_to_evaluate], fontsize=12)
+        ax.set_xticks([p + width for p in range(len(all_cases))])
+        ax.set_xticklabels([case_to_label[case] for case in all_cases],
+                           rotation=45, ha="right")
+
     ax.legend()
 
     plt.subplots_adjust(hspace=0.5, wspace=0.3)
-
     plt.tight_layout()
-
-    output_path = os.path.join(output_directory, f"{metric_to_evaluate}.png")
-    plt.savefig(output_path)
+    plt.savefig(output_directory / f"{metric_to_evaluate}.png", dpi=300)
     plt.close(fig)
 
 
 data_metric = np.mean
 
-output_directory = "./bsc-thesis/figures/evaluation"
+BASE_DIR = Path(__file__).resolve().parent
+output_directory = BASE_DIR / "figures" / "plot_averages"
+output_directory.mkdir(parents=True, exist_ok=True)
 
 metrics = [
     "graph_edit_distance",
