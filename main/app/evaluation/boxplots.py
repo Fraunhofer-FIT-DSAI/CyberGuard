@@ -3,6 +3,7 @@ from tinydb import Query
 from plot_averages import get_table, models
 import json
 import os
+from pathlib import Path
 
 cases = [
     "baseline",
@@ -101,14 +102,14 @@ def analyze_metric(metric_to_evaluate, model):
 
     plt.tight_layout()
 
-    output_path = os.path.join(
-        output_directory, f"box_plot_{model}_{metric_to_evaluate}.png"
-    )
-    plt.savefig(output_path)
+    
+    plt.savefig(output_directory / f"syntactic_refinement_{metric_to_evaluate}.png")
     plt.close(fig)
 
 
-output_directory = "./bsc-thesis/figures/evaluation"
+BASE_DIR = Path(__file__).resolve().parent
+output_directory = BASE_DIR / "figures" / "boxplots"
+output_directory.mkdir(parents=True, exist_ok=True)
 
 
 metric = "syntactic"
