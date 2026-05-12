@@ -1,6 +1,9 @@
-This repository contains the code used for the experiments described in the paper "From Legacy to Standard: LLM-Assisted Transformation of Cybersecurity Playbooks into CACAO Format," conducted as part of the CyberGuard and CyberGuard++ projects. The paper was accepted at SecAI 2025. The authors’ preprint is available on Arxiv: [https://arxiv.org/pdf/2508.03342](https://arxiv.org/pdf/2508.03342).
+This repository contains the code used for the experiments described in the paper **"From Legacy to Standard: LLM-Assisted Transformation of Cybersecurity Playbooks into CACAO Format"**, conducted as part of the **CyberGuard** and **CyberGuard++** projects. The paper was accepted at **SecAI 2025** and published by Springer in the **Computer Security ESORICS 2025 International Workshops** proceedings.
 
-This study was funded by Fraunhofer FIT under the project CyberGuard and by the Fraunhofer Cluster of Excellence Cognitive Internet Technologies under the project CyberGuard++.
+Published version: https://link.springer.com/chapter/10.1007/978-3-032-16092-8_27  
+Authors’ preprint: https://arxiv.org/pdf/2508.03342
+
+This study was funded by Fraunhofer FIT under the project CyberGuard and by the Fraunhofer Cluster of Excellence Cognitive Internet Technologies under the project name CyberGuard++. 
 
 
 # Setup:
